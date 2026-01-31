@@ -1,6 +1,10 @@
 let products = [];
 async function fetchProduct(){
+    const loader = document.getElementById("loader")
+    const divObj = document.getElementById("product-container")
     try{
+        loader.style.display="block"
+        divObj.style.display="none"
         let url = "https://dummyjson.com/products"
         let response = await fetch(url)
         const data = await response.json();
@@ -8,6 +12,9 @@ async function fetchProduct(){
         createCards();
 
         //console.log(products);
+
+        loader.style.display="none"
+        divObj.style.display="grid"
     } 
     catch(err){
         console.log(err);
@@ -28,7 +35,7 @@ function createCards(){
         card.className = "card";
 
         card.innerHTML = `
-        <img src="${imageurl} alt=${title}">
+        <img src="${imageurl}" alt="${title}">
         <h3>${title}</h3>
         <p>${description}</p>
         <p>Cateogry: ${category}</p>
@@ -54,7 +61,7 @@ function addToCart(productId){
 
 function getFromCart(){
     let products = JSON.parse(localStorage.getItem("cart")) || [];
-    const divObj = document.getElementById("card-contianer");
+    const divObj = document.getElementById("cart-container");
 
     for(let product of products){
         let title = product.title
@@ -68,13 +75,13 @@ function getFromCart(){
         card.className = "card";
 
         card.innerHTML = `
-        <img src="${imageurl} alt=${title}">
+        <img src="${imageurl}" alt="${title}">
         <h3>${title}</h3>
         <p>${description}</p>
         <p>Cateogry: ${category}</p>
         <p>Price: ${price}</p>
         <p>Rating: ${rating}</p>
-        <button class="btn">Add to Cart</button>
+        <button class="btn">Place Order</button>
         `;
 
         divObj.appendChild(card);
@@ -87,12 +94,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function searchProduct(){
     let input = document.getElementById("search-input").value.toLowerCase();
-    let matchedData = products.filter(product => product.title.toLowerCase().includes(input));
+    let matchedData = products.filter((product) => product.title.toLowerCase().includes(input));
     displaySearchProducts(matchedData);
 }
 
 function displaySearchProducts(products){
     const divObj = document.getElementById("product-container");
+    divObj.innerHTML = ""
     if(products.length === 0){
         divObj.innerHTML = "<h3>No Product Found</h3>"
     }
@@ -109,7 +117,7 @@ function displaySearchProducts(products){
         card.className = "card";
 
         card.innerHTML = `
-        <img src="${imageurl} alt=${title}">
+        <img src="${imageurl}" alt="${title}">
         <h3>${title}</h3>
         <p>${description}</p>
         <p>Cateogry: ${category}</p>
@@ -126,10 +134,10 @@ function displaySearchProducts(products){
 
 function debounce(fn, delay){
     let timer;
-    return function(...args){
+    return function(){
         clearTimeout(timer);
         timer = setTimeout(() => {
-            fn.apply(this, args);
+            fn()
         }, delay);
     }
 }
