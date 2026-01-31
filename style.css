@@ -66,3 +66,13 @@ nav a{
     border: none;
     outline: none;
 }
+
+footer {
+  background: #007bff;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+  position: relative;
+  overflow: hidden;
+}

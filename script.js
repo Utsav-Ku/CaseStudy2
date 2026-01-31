@@ -6,6 +6,8 @@ async function fetchProduct(){
         const data = await response.json();
         products = data.products;
         createCards();
+
+        //console.log(products);
     } 
     catch(err){
         console.log(err);
