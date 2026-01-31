@@ -1,4 +1,6 @@
-let products = [];
+let products = []; //Array to store result of fetch API
+
+//Function to call Api
 async function fetchProduct(){
     const loader = document.getElementById("loader")
     const divObj = document.getElementById("product-container")
@@ -21,6 +23,7 @@ async function fetchProduct(){
     }
 }
 
+//Function to create cards of the products fetched from the api
 function createCards(){
     const divObj = document.getElementById("product-container");
     for(let product of products){
@@ -39,8 +42,8 @@ function createCards(){
         <h3>${title}</h3>
         <p>${description}</p>
         <p>Cateogry: ${category}</p>
-        <p>Price: ${price}</p>
-        <p>Rating: ${rating}</p>
+        <p>Price: ₹${price}</p>
+        <p>Rating: ⭐${rating}</p>
         <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
         `;
 
@@ -51,18 +54,28 @@ function createCards(){
 }
 fetchProduct();
 
+//Function to add items to cart and store it in localstorage
 function addToCart(productId){
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     let product = products.find(p => p.id === productId);
     cart.push(product);
     localStorage.setItem("cart", JSON.stringify(cart));
+    findCartLength()
     alert("Item added to cart")
 }
 
+//function the find number of items in the cart
+function findCartLength(){
+    let items = JSON.parse(localStorage.getItem("cart") || []);
+    let element = document.getElementById("total-items")
+    element.innerText = items.length
+}
+document.addEventListener("DOMContentLoaded", findCartLength); //use to call findcartlength whenever the page loads
+
+//function to get items from the localstorage and show it in cart page
 function getFromCart(){
     let products = JSON.parse(localStorage.getItem("cart")) || [];
     const divObj = document.getElementById("cart-container");
-
     for(let product of products){
         let title = product.title
         let description = product.description
@@ -79,25 +92,26 @@ function getFromCart(){
         <h3>${title}</h3>
         <p>${description}</p>
         <p>Cateogry: ${category}</p>
-        <p>Price: ${price}</p>
-        <p>Rating: ${rating}</p>
+        <p>Price: ₹${price}</p>
+        <p>Rating: ⭐${rating}</p>
         <button class="btn">Place Order</button>
         `;
 
         divObj.appendChild(card);
     }
+
+    calculate()
 }
+document.addEventListener("DOMContentLoaded", getFromCart);
 
-document.addEventListener("DOMContentLoaded", function() {
-    getFromCart();
-})
-
+//function to search products from products array
 function searchProduct(){
     let input = document.getElementById("search-input").value.toLowerCase();
     let matchedData = products.filter((product) => product.title.toLowerCase().includes(input));
     displaySearchProducts(matchedData);
 }
 
+//function to display the products that is searched
 function displaySearchProducts(products){
     const divObj = document.getElementById("product-container");
     divObj.innerHTML = ""
@@ -121,8 +135,8 @@ function displaySearchProducts(products){
         <h3>${title}</h3>
         <p>${description}</p>
         <p>Cateogry: ${category}</p>
-        <p>Price: ${price}</p>
-        <p>Rating: ${rating}</p>
+        <p>Price: ₹${price}</p>
+        <p>Rating: ⭐${rating}</p>
         <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
         `;
 
@@ -132,6 +146,7 @@ function displaySearchProducts(products){
     }
 }
 
+//implementation of debounce
 function debounce(fn, delay){
     let timer;
     return function(){
@@ -144,6 +159,12 @@ function debounce(fn, delay){
 
 const handleSearch = debounce(searchProduct, 1000);
 
+//function to write in console when scrolling
+function writeInConsole(){
+    console.log("Scrolling...")
+}
+
+//implementation of throtle
 function throttle(fn, limit) {
     let flag = true;
     return function () {
@@ -156,5 +177,21 @@ function throttle(fn, limit) {
         }
     };
 }
+window.addEventListener("scroll", throttle(writeInConsole, 2000));
 
-window.addEventListener("scroll", throttle(fn, 2000));
+
+//function to find the number of items in cart and calculate the total price of that item
+function calculate(){
+    let items = JSON.parse(localStorage.getItem("cart") || []);
+    let totalItem = items.length;
+
+    let totalPrice = items.reduce((sum, item) => {
+        return sum + item.price;
+    }, 0);
+
+    let itemObj = document.getElementById("total-items")
+    let priceObj = document.getElementById("total-price")
+
+    itemObj.innerText = totalItem
+    priceObj.innerText = totalPrice
+}
