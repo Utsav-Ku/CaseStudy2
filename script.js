@@ -77,6 +77,10 @@ function getFromCart(){
     let products = JSON.parse(localStorage.getItem("cart")) || [];
     const divObj = document.getElementById("cart-container");
 
+    if(!divObj){
+        return;
+    }
+
     if(products.length === 0){
         divObj.innerHTML = '<h3 id="empty-cart">Your Cart Is Empty</h3>'
         return;
@@ -188,7 +192,7 @@ window.addEventListener("scroll", throttle(writeInConsole, 2000));
 
 //function to find the number of items in cart and calculate the total price of that item
 function calculate(){
-    let items = JSON.parse(localStorage.getItem("cart") || []);
+    let items = JSON.parse(localStorage.getItem("cart")) || [];
     let totalItem = items.length;
     let totalPrice = 0;
 
