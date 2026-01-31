@@ -8,6 +8,12 @@ body {
     font-family: Arial, sans-serif;
 }
 
+#empty-cart{
+    text-align: center;
+    color: red;
+    font-size: 50px;
+}
+
 .main-content {
     flex: 1;
 }
@@ -70,6 +76,25 @@ body {
     border-radius: 5px;
     border: none;
 }
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn {
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background-color: #0056b3;
+}
+
 
 nav a {
     color: white;

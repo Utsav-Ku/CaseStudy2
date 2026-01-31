@@ -66,7 +66,7 @@ function addToCart(productId){
 
 //function the find number of items in the cart
 function findCartLength(){
-    let items = JSON.parse(localStorage.getItem("cart") || []);
+    let items = JSON.parse(localStorage.getItem("cart")) || [];
     let element = document.getElementById("total-items")
     element.innerText = items.length
 }
@@ -76,6 +76,12 @@ document.addEventListener("DOMContentLoaded", findCartLength); //use to call fin
 function getFromCart(){
     let products = JSON.parse(localStorage.getItem("cart")) || [];
     const divObj = document.getElementById("cart-container");
+
+    if(products.length === 0){
+        divObj.innerHTML = '<h3 id="empty-cart">Your Cart Is Empty</h3>'
+        return;
+    }
+
     for(let product of products){
         let title = product.title
         let description = product.description
@@ -184,8 +190,9 @@ window.addEventListener("scroll", throttle(writeInConsole, 2000));
 function calculate(){
     let items = JSON.parse(localStorage.getItem("cart") || []);
     let totalItem = items.length;
+    let totalPrice = 0;
 
-    let totalPrice = items.reduce((sum, item) => {
+    totalPrice = items.reduce((sum, item) => {
         return sum + item.price;
     }, 0);
 
