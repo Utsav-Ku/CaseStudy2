@@ -81,6 +81,8 @@ function getFromCart(){
         return;
     }
 
+    divObj.innerHTML = ""
+
     if(products.length === 0){
         divObj.innerHTML = '<h3 id="empty-cart">Your Cart Is Empty</h3>'
         return;
@@ -104,7 +106,7 @@ function getFromCart(){
         <p>Cateogry: ${category}</p>
         <p>Price: ₹${price}</p>
         <p>Rating: ⭐${rating}</p>
-        <button class="btn">Place Order</button>
+        <button class="btn" onclick=removefromCart(${product.id})>Remove from Cart</button>
         `;
 
         divObj.appendChild(card);
@@ -205,4 +207,15 @@ function calculate(){
 
     itemObj.innerText = totalItem
     priceObj.innerText = totalPrice
+}
+
+//function to remove item from the cart
+function removefromCart(productId){
+    let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+    cartItems = cartItems.filter(item => item.id !== productId);
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+
+    getFromCart();
+    calculate();
+    findCartLength();
 }
